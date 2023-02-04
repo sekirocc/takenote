@@ -1,25 +1,3 @@
 .container {
-    margin: 0;
-    /* padding-top: 10vh; */
-    display: flex;
-    justify-content: center;
-    text-align: center;
-    height: 500px;
-
-    &__sidebar {
-        flex: 0 0 200px;
-
-        ul {
-            height: 100%;
-            overflow: auto;
-
-            li {
-                text-align: left;
-            }
-        }
-    }
-
-    &__editor {
-        flex: 1 1;
-    }
+    height: 100%;
 }
