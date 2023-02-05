@@ -51,6 +51,7 @@ function App() {
         if (notebookLoaded) {
             console.log("already loaded notebookList: ");
             console.log(notebookList);
+            setNotebookList(notebookList);
             return;
         }
 
@@ -67,6 +68,7 @@ function App() {
     })
 
     function selectNotebook(name: string) {
+        console.log(name)
         notebookList.find((notebook, i) => {
             if (notebook.name == name) {
                 console.log("find selected notebook: ")
