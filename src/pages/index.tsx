@@ -3,10 +3,12 @@ import { invoke } from "@tauri-apps/api/tauri";
 
 import { Grommet, Header, Text, Box, Grid, Button } from 'grommet';
 
-import { getAllNotesData } from '../lib/notes';
+import { getNotebooksData } from '../lib/notes';
 
-import { Sidebar } from '../components/sidebar';
+import { NotebookList } from '../components/notebook_list';
+import { NoteList } from '../components/note_list';
 import { MainEditor } from "../components/main_editor";
+import { Note, Notebook } from "../lib/type";
 
 function App() {
     const [greetMsg, setGreetMsg] = useState("");
@@ -15,10 +17,19 @@ function App() {
         setGreetMsg(await invoke("greet", { name: "iam", }));
     }
 
-    const [noteList, setNoteList] = useState([]);
-    const [noteDetail, setNoteDetail] = useState("");
+    // const dirInDownload = "~/Downloads/quiver_out";
+    const dirInDownload = "quiver_out";
 
-    const [showSidebar, setShowSidebar] = useState(true);
+    const [notebookLoaded, setNotebookLoaded] = useState(false);
+
+    const [notebookList, setNotebookList] = useState<Notebook[]>([]);
+    const [noteList, setNoteList] = useState<Note[]>([]);
+
+    const [currentNotebook, setCurrentNotebook] = useState<Notebook>(new Notebook());
+    const [currentNote, setCurrentNote] = useState<Note>(new Note());
+
+    const [showNotebookList, setShowNotebookList] = useState(true);
+    const [showNoteList, setShowNoteList] = useState(true);
 
     const grommetOpts = {
         global: {
@@ -35,44 +46,59 @@ function App() {
         if (!isClient) {
             return;
         }
+        // console.log("isClient, window.innerHeight", window.innerHeight);
 
-        console.log("isClient, window.innerHeight", window.innerHeight);
-        invoke('greet', { name: 'World' }).then(console.log).catch(console.error);
-
-        if (noteList.length > 0) {
-            console.log("noteList length is: " + noteList.length);
-            console.log(noteList);
+        if (notebookLoaded) {
+            console.log("already loaded notebookList: ");
+            console.log(notebookList);
             return;
         }
 
         const fetchData = async () => {
-            console.log("before allNotesData");
-            const allNotesData = await getAllNotesData();
-
-            const names = allNotesData.map((fileEntry, index, subDirs) => {
-                return fileEntry.name;
-            });
-
-            console.log("names");
-            setNoteList(names);
+            console.log("before getNotebooksData");
+            const notebooks = await getNotebooksData(dirInDownload);
+            // setRawData(notebooks);
+            console.log("notebooks");
+            setNotebookList(notebooks);
+            setNotebookLoaded(true);
         }
 
         fetchData();
     })
 
+    function selectNotebook(name: string) {
+        notebookList.find((notebook, i) => {
+            if (notebook.name == name) {
+                console.log("find selected notebook: ")
+                console.log(notebook);
+                setCurrentNotebook(notebook);
+                setNoteList(notebook.notes);
+                return true;
+            }
+        })
+    }
+
+    function selectNote(name: string) {
+        noteList.find((note, i) => {
+            if (note.name == name) {
+                setCurrentNote(note);
+                return true;
+            }
+        })
+    }
+
     return (
-
         <Grommet theme={grommetOpts} full>
-
             <Grid
                 fill
                 height={{ height: "500px" }}
                 rows={['auto', 'flex']}
                 columns={['auto', 'flex']}
                 areas={[
-                    { name: 'header', start: [0, 0], end: [1, 0] },
-                    { name: 'sidebar', start: [0, 1], end: [0, 1] },
-                    { name: 'main', start: [1, 1], end: [1, 1] },
+                    { name: 'header', start: [0, 0], end: [2, 0] },
+                    { name: 'notebook_list', start: [0, 1], end: [0, 1] },
+                    { name: 'note_list', start: [1, 1], end: [1, 1] },
+                    { name: 'main', start: [2, 1], end: [2, 1] },
                 ]}
             >
                 <Box
@@ -83,15 +109,32 @@ function App() {
                     pad={{ horizontal: 'medium', vertical: 'small' }}
                     background="dark-2"
                 >
-                    <Button onClick={() => setShowSidebar(!showSidebar)}>
-                        <Text size="large">Title</Text>
+                    <Button onClick={() => setShowNotebookList(!showNotebookList)}>
+                        <Text size="large">Show Notebook List</Text>
+                    </Button>
+                    <Button onClick={() => setShowNoteList(!showNoteList)}>
+                        <Text size="large">Show Note List</Text>
                     </Button>
                     <Text>options</Text>
                 </Box>
 
-                {showSidebar && <Sidebar></Sidebar>}
+                {showNotebookList &&
+                    <NotebookList
+                        notebooks={notebookList}
+                        current={currentNotebook}
+                        selectNotebookHandler={selectNotebook}
+                    />}
 
-                <MainEditor></MainEditor>
+                {showNoteList &&
+                    <NoteList
+                        notes={noteList}
+                        current={currentNote}
+                        selectNoteHandler={selectNote}
+                    />}
+
+                <MainEditor
+                    current={currentNote}
+                />
 
             </Grid>
 
