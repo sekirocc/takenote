@@ -6,8 +6,6 @@ import { getNoteDetail } from '../lib/notes';
 import { Text, Box } from 'grommet';
 import { NoteDetail } from "../lib/type";
 
-var noteDetailCache = {};
-
 export const MainEditor = (props) => {
     const editorRef = useRef(null);
     const log = () => {
@@ -22,16 +20,8 @@ export const MainEditor = (props) => {
         const isClient = typeof window !== 'undefined';
         if (!isClient) { return; }
 
-        if (noteDetailCache[props.current.name]) {
-            const noteDetail = noteDetailCache[props.current.name];
-            setNoteDetail(noteDetail);
-            return
-        }
-
         const fetchData = async () => {
-            console.log("before getNoteDetail");
             const noteDetail = await getNoteDetail(props.current);
-            noteDetailCache[props.current.name] = noteDetail;
             setNoteDetail(noteDetail);
         }
 

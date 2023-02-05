@@ -43,7 +43,15 @@ export const getNotebooksData = async (dirInDownload: string): Promise<Notebook[
     return notebooks;
 };
 
-export const getNoteDetail = async (note: Note) : Promise<NoteDetail> => {
+var noteDetailCache = {};
+
+export const getNoteDetail = async (note: Note): Promise<NoteDetail> => {
+    if (noteDetailCache[note.name]) {
+        console.log("noteDetail cache hit");
+        const noteDetail = noteDetailCache[note.name];
+        return noteDetail;
+    }
+
     const { join } = await import('@tauri-apps/api/path');
 
     if (!note.dirpath) {
@@ -62,5 +70,7 @@ export const getNoteDetail = async (note: Note) : Promise<NoteDetail> => {
 
     const noteDetail = new NoteDetail(note, content);
     console.log(noteDetail);
+
+    noteDetailCache[note.name] = noteDetail;
     return noteDetail;
 }
