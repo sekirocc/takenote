@@ -1,14 +1,24 @@
 
+export class NoteDetail {
+    note: Note;
+    content: string;
+
+    constructor(note?: Note, content?: string) {
+        this.note = note;
+        this.content = content;
+    }
+};
+
 export class Note {
     name: string;
     dirpath: string;
-    filepath: string;
-    resourceDir: string;
 
-    constructor(name?: string, dirpath?: string, filepath?: string, resourceDir?: string) {
+    resourceDir = "resources";
+    page = "index.html";
+
+    constructor(name?: string, dirpath?: string, resourceDir?: string) {
         this.name = name;
         this.dirpath = dirpath;
-        this.filepath = filepath;
         this.resourceDir = resourceDir;
     }
 };
@@ -21,6 +31,6 @@ export class Notebook {
     constructor(name?: string, dirpath?: string, notes?: Note[]) {
         this.name = name;
         this.dirpath = dirpath;
-        this.notes = notes;
+        this.notes = notes || [];
     }
 };

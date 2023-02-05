@@ -4,6 +4,9 @@ import { Editor } from "@tinymce/tinymce-react";
 import { getNoteDetail } from '../lib/notes';
 
 import { Text, Box } from 'grommet';
+import { NoteDetail } from "../lib/type";
+
+var noteDetailCache = {};
 
 export const MainEditor = (props) => {
     const editorRef = useRef(null);
@@ -13,15 +16,34 @@ export const MainEditor = (props) => {
         }
     }
 
-    console.log("main editor get note:")
-    console.log(props.current)
+    const [noteDetail, setNoteDetail] = useState<NoteDetail>(null);
+
+    useEffect(() => {
+        const isClient = typeof window !== 'undefined';
+        if (!isClient) { return; }
+
+        if (noteDetailCache[props.current.name]) {
+            const noteDetail = noteDetailCache[props.current.name];
+            setNoteDetail(noteDetail);
+            return
+        }
+
+        const fetchData = async () => {
+            console.log("before getNoteDetail");
+            const noteDetail = await getNoteDetail(props.current);
+            noteDetailCache[props.current.name] = noteDetail;
+            setNoteDetail(noteDetail);
+        }
+
+        fetchData();
+    })
 
     return <Box gridArea="main" justify="center" align="center">
         <Text>main</Text>
         <Editor
             tinymceScriptSrc={"/assets/libs/tinymce/tinymce.min.js"}
             onInit={(evt, editor) => editorRef.current = editor}
-            initialValue="<p>This is the initial content of the editor.</p>"
+            initialValue={noteDetail && noteDetail.content}
             init={{
                 height: 500,
                 menubar: false,
