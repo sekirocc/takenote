@@ -6,14 +6,14 @@ import { Grommet, Header, Text, Box, Grid, Button, DataTable } from 'grommet';
 export const NoteList = (props) => {
 
     const columns = [
-        { property: "name", size: "50px", primary: true, header: <Text>Notes</Text>, }
+        { property: "name", size: "50px", primary: true, }
     ]
     var rowProps = {};
     rowProps[props.current.name] = { background: "dark-5" };
 
     return (
         <Box
-            overflow="scroll"
+            // overflow="scroll"
             gridArea="note_list"
             background="dark-3"
             width="small"
@@ -21,15 +21,20 @@ export const NoteList = (props) => {
                 { type: 'fadeIn', duration: 300 },
                 // { type: 'slideRight', size: 'xlarge', duration: 150 },
             ]} >
-            <DataTable
-                pin={true}
-                columns={columns}
-                primaryKey="name"
-                // size="xlarge"
-                rowProps={rowProps}
-                data={props.notes}
-                onClickRow={({ datum, }) => props.selectNoteHandler(datum.name)}
-            />
+            <Text textAlign="center" >notes</Text>
+            <Box
+                overflow="scroll" >
+                <DataTable
+                    className="notes_pane"
+                    columns={columns}
+                    primaryKey="name"
+                    // size="xlarge"
+                    rowProps={rowProps}
+                    data={props.notes}
+                    onClickRow={({ datum, }) => props.selectNoteHandler(datum.name)}
+                />
+
+            </Box>
         </Box>
 
         // <Box

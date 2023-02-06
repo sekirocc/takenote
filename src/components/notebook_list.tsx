@@ -8,14 +8,14 @@ export const NotebookList = (props) => {
     console.log("in NotebookList");
 
     const columns = [
-        { property: "name", size: "50px", primary: true, header: <Text>Notebooks</Text>, }
+        { property: "name", size: "50px", primary: true, }
     ]
     var rowProps = {};
     rowProps[props.current.name] = { background: "dark-5" };
 
     return (
         <Box
-            overflow="scroll"
+            // overflow="scroll"
             gridArea="notebook_list"
             background="dark-3"
             width="small"
@@ -23,14 +23,18 @@ export const NotebookList = (props) => {
                 { type: 'fadeIn', duration: 300 },
                 // { type: 'slideRight', size: 'xlarge', duration: 150 },
             ]} >
-            <DataTable
-                pin={true}
-                columns={columns}
-                primaryKey="name"
-                rowProps={rowProps}
-                data={props.notebooks}
-                onClickRow={({ datum, }) => props.selectNotebookHandler(datum.name)}
-            />
+            <Text textAlign="center" >notebooks</Text>
+            <Box
+                overflow="scroll" >
+                <DataTable
+                    className="notebooks_pane"
+                    columns={columns}
+                    primaryKey="name"
+                    rowProps={rowProps}
+                    data={props.notebooks}
+                    onClickRow={({ datum, }) => props.selectNotebookHandler(datum.name)}
+                />
+            </Box>
         </Box>
         // <Box
         //     overflow="scroll"
