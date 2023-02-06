@@ -8,7 +8,7 @@ export const NotebookList = (props) => {
     console.log("in NotebookList");
 
     const columns = [
-        { property: "name", size: "50px", }
+        { property: "name", size: "50px", primary: true, header: <Text>Notebooks</Text>, }
     ]
     var rowProps = {};
     rowProps[props.current.name] = { background: "dark-5" };
@@ -24,6 +24,7 @@ export const NotebookList = (props) => {
                 // { type: 'slideRight', size: 'xlarge', duration: 150 },
             ]} >
             <DataTable
+                pin={true}
                 columns={columns}
                 primaryKey="name"
                 rowProps={rowProps}

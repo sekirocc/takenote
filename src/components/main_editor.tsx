@@ -29,12 +29,12 @@ export const MainEditor = (props) => {
     })
 
     return <Box gridArea="main" justify="center" align="center">
-        <Text>main</Text>
         <Editor
             tinymceScriptSrc={"/assets/libs/tinymce/tinymce.min.js"}
             onInit={(evt, editor) => editorRef.current = editor}
             initialValue={noteDetail && noteDetail.content}
             init={{
+                width: "100%",
                 height: 500,
                 menubar: false,
                 plugins: [

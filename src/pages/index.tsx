@@ -34,7 +34,6 @@ function App() {
     const grommetOpts = {
         global: {
             font: {
-                family: "Roboto",
                 size: "18px",
                 height: "20px",
             }
@@ -95,7 +94,7 @@ function App() {
                 fill
                 height={{ height: "500px" }}
                 rows={['auto', 'flex']}
-                columns={['auto', 'flex']}
+                columns={['auto', 'auto', 'flex']}
                 areas={[
                     { name: 'header', start: [0, 0], end: [2, 0] },
                     { name: 'notebook_list', start: [0, 1], end: [0, 1] },
