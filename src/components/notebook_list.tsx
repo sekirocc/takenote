@@ -25,6 +25,7 @@ export const NotebookList = (props) => {
             ]} >
                 <Text textAlign="center" >notebooks</Text>
             <Box
+                border={{side: "left"}}
                 overflow="scroll" >
                 <DataTable
                     className="notebooks_pane"

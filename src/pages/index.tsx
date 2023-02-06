@@ -41,6 +41,12 @@ function App() {
         dataTable: {
             primary: {
                 weight: 'normal'
+            },
+            header: {
+                extend: "display: none; border: none",
+            },
+            body: {
+                extend: "font-size: 14px",
             }
         }
 
