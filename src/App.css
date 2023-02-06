@@ -2,7 +2,7 @@
   padding: 1.5em !important;
 }
 
-span.logos > a > span {
+span.logos>a>span {
   overflow: inherit !important;
 }
 
@@ -19,3 +19,12 @@ span.logos > a > span {
     filter: drop-shadow(0 0 2em #ffff);
   }
 }
+
+button {
+  box-shadow: none;
+}
+
+button>div {
+  padding: 6px !important;
+}
+

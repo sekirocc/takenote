@@ -34,10 +34,16 @@ function App() {
     const grommetOpts = {
         global: {
             font: {
-                size: "18px",
-                height: "20px",
+                size: "14px",
+                height: "16px"
+            }
+        },
+        dataTable: {
+            primary: {
+                weight: 'normal'
             }
         }
+
     }
 
     useEffect(() => {
@@ -51,6 +57,9 @@ function App() {
             console.log("already loaded notebookList: ");
             console.log(notebookList);
             setNotebookList(notebookList);
+            if (!currentNotebook.name) {
+                selectNotebook(notebookList[1].name)
+            }
             return;
         }
 
@@ -88,11 +97,17 @@ function App() {
         })
     }
 
+    function changePaneVisible(notebookListPaneVisible: boolean, noteListPaneVisible: boolean) {
+        setShowNotebookList(notebookListPaneVisible)
+        setShowNoteList(noteListPaneVisible)
+    }
+
     return (
         <Grommet theme={grommetOpts} full>
             <Grid
                 fill
-                height={{ height: "500px" }}
+                //height={{ height: "500px" }}
+                height="100%"
                 rows={['auto', 'flex']}
                 columns={['auto', 'auto', 'flex']}
                 areas={[
@@ -102,22 +117,6 @@ function App() {
                     { name: 'main', start: [2, 1], end: [2, 1] },
                 ]}
             >
-                <Box
-                    gridArea="header"
-                    direction="row"
-                    align="center"
-                    justify="between"
-                    pad={{ horizontal: 'medium', vertical: 'small' }}
-                    background="dark-2"
-                >
-                    <Button onClick={() => setShowNotebookList(!showNotebookList)}>
-                        <Text size="large">Show Notebook List</Text>
-                    </Button>
-                    <Button onClick={() => setShowNoteList(!showNoteList)}>
-                        <Text size="large">Show Note List</Text>
-                    </Button>
-                    <Text>options</Text>
-                </Box>
 
                 {showNotebookList &&
                     <NotebookList
@@ -135,6 +134,7 @@ function App() {
 
                 <MainEditor
                     current={currentNote}
+                    panesVisibleChange={changePaneVisible}
                 />
 
             </Grid>

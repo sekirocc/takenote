@@ -3,8 +3,14 @@ import { Editor } from "@tinymce/tinymce-react";
 
 import { getNoteDetail } from '../lib/notes';
 
-import { Text, Box } from 'grommet';
+import { Close } from 'grommet-icons';
+
+import { Menu, Down } from 'grommet-icons';
+
+import { Box, Menu as GMenu, Button, DropButton, Grid, Heading, Text } from 'grommet';
+
 import { NoteDetail } from "../lib/type";
+import React from "react";
 
 export const MainEditor = (props) => {
     const editorRef = useRef(null);
@@ -13,6 +19,8 @@ export const MainEditor = (props) => {
             console.log(editorRef.current.getContent());
         }
     }
+
+    const [open, setOpen] = useState(false);
 
     const [noteDetail, setNoteDetail] = useState<NoteDetail>(null);
 
@@ -28,27 +36,52 @@ export const MainEditor = (props) => {
         fetchData();
     })
 
-    return <Box gridArea="main" justify="center" align="center">
-        <Editor
-            tinymceScriptSrc={"/assets/libs/tinymce/tinymce.min.js"}
-            onInit={(evt, editor) => editorRef.current = editor}
-            initialValue={noteDetail && noteDetail.content}
-            init={{
-                width: "100%",
-                height: 500,
-                menubar: false,
-                plugins: [
-                    'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-                    'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                    'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
-                ],
-                toolbar: 'undo redo | blocks | ' +
-                    'bold italic forecolor | alignleft aligncenter ' +
-                    'alignright alignjustify | bullist numlist outdent indent | ' +
-                    'removeformat | help',
-                content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
-            }}
-        />
-    </Box>
+    return (
+        <Box gridArea="main" justify="center" align="center"
+            background={"white"}
+        >
+            <Box
+                className="column_header"
+                width="100%"
+                align="start"
+                direction="row"
+            >
+                <Menu></Menu>
+                <GMenu
+                    size="small"
+                    margin={{ "left": "10px" }}
+                    className="main_editor_top_dropdown_menu"
+                    icon={<Down vectorEffect="non-scaling-stroke" ></Down>}
+                    alignSelf="center"
+                    items={[
+                        { label: "Sinle pane", onClick: () => { props.panesVisibleChange(false, false) } },
+                        { label: "Two panes", onClick: () => { props.panesVisibleChange(false, true) } },
+                        { label: 'Three panes', onClick: () => { props.panesVisibleChange(true, true) } },
+                    ]}
+                />
+            </Box>
+            <Editor
+                tinymceScriptSrc={"/assets/libs/tinymce/tinymce.min.js"}
+                onInit={(evt, editor) => editorRef.current = editor}
+                initialValue={noteDetail && noteDetail.content}
+                init={{
+                    width: "100%",
+                    height: "100%",
+                    // height: 500,
+                    menubar: false,
+                    plugins: [
+                        'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                        'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                        'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
+                    ],
+                    toolbar: 'undo redo | blocks | ' +
+                        'bold italic forecolor | alignleft aligncenter ' +
+                        'alignright alignjustify | bullist numlist outdent indent | ' +
+                        'removeformat | help',
+                    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+                }}
+            />
+        </Box>
+    )
 
 }

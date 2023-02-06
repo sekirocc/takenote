@@ -17,13 +17,13 @@ export const NotebookList = (props) => {
         <Box
             // overflow="scroll"
             gridArea="notebook_list"
-            background="dark-3"
+            background="white"
             width="small"
             animation={[
                 { type: 'fadeIn', duration: 300 },
                 // { type: 'slideRight', size: 'xlarge', duration: 150 },
             ]} >
-            <Text textAlign="center" >notebooks</Text>
+                <Text textAlign="center" >notebooks</Text>
             <Box
                 overflow="scroll" >
                 <DataTable

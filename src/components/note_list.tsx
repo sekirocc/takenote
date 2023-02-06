@@ -15,14 +15,16 @@ export const NoteList = (props) => {
         <Box
             // overflow="scroll"
             gridArea="note_list"
-            background="dark-3"
+            background="white"
             width="small"
             animation={[
                 { type: 'fadeIn', duration: 300 },
                 // { type: 'slideRight', size: 'xlarge', duration: 150 },
             ]} >
+
             <Text textAlign="center" >notes</Text>
             <Box
+                border={{side: "left"}}
                 overflow="scroll" >
                 <DataTable
                     className="notes_pane"
