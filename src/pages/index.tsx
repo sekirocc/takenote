@@ -1,8 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
 
-import { Grommet, Header, Text, Box, Grid, Button } from 'grommet';
-
 import { getNotebooksData } from '../lib/notes';
 
 import { NotebookList } from '../components/notebook_list';
@@ -30,27 +28,6 @@ function App() {
 
     const [showNotebookList, setShowNotebookList] = useState(true);
     const [showNoteList, setShowNoteList] = useState(true);
-
-    const grommetOpts = {
-        global: {
-            font: {
-                size: "14px",
-                height: "16px"
-            }
-        },
-        dataTable: {
-            primary: {
-                weight: 'normal'
-            },
-            header: {
-                extend: "display: none; border: none",
-            },
-            body: {
-                extend: "font-size: 14px",
-            }
-        }
-
-    }
 
     useEffect(() => {
         const isClient = typeof window !== 'undefined';
@@ -109,43 +86,35 @@ function App() {
     }
 
     return (
-        <Grommet theme={grommetOpts} full>
-            <Grid
-                fill
-                //height={{ height: "500px" }}
-                height="100%"
-                rows={['auto', 'flex']}
-                columns={['auto', 'auto', 'flex']}
-                areas={[
-                    { name: 'header', start: [0, 0], end: [2, 0] },
-                    { name: 'notebook_list', start: [0, 1], end: [0, 1] },
-                    { name: 'note_list', start: [1, 1], end: [1, 1] },
-                    { name: 'main', start: [2, 1], end: [2, 1] },
-                ]}
-            >
-
-                {showNotebookList &&
+        <div className="container">
+            {showNotebookList &&
+                <div className="pane1">
                     <NotebookList
                         notebooks={notebookList}
                         current={currentNotebook}
                         selectNotebookHandler={selectNotebook}
-                    />}
+                    />
+                </div>
+            }
 
-                {showNoteList &&
+            {showNoteList &&
+                <div className="pane2">
                     <NoteList
                         notes={noteList}
                         current={currentNote}
                         selectNoteHandler={selectNote}
-                    />}
+                    />
+                </div>
+            }
 
+            <div className="pane3">
                 <MainEditor
                     current={currentNote}
                     panesVisibleChange={changePaneVisible}
                 />
+            </div>
 
-            </Grid>
-
-        </Grommet>
+        </div>
     );
 }
 

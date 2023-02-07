@@ -37,29 +37,8 @@ export const MainEditor = (props) => {
     })
 
     return (
-        <Box gridArea="main" justify="center" align="center"
-            background={"white"}
-        >
-            <Box
-                className="column_header"
-                width="100%"
-                align="start"
-                direction="row"
-            >
-                <Menu></Menu>
-                <GMenu
-                    size="small"
-                    margin={{ "left": "10px" }}
-                    className="main_editor_top_dropdown_menu"
-                    icon={<Down vectorEffect="non-scaling-stroke" ></Down>}
-                    alignSelf="center"
-                    items={[
-                        { label: "Sinle pane", onClick: () => { props.panesVisibleChange(false, false) } },
-                        { label: "Two panes", onClick: () => { props.panesVisibleChange(false, true) } },
-                        { label: 'Three panes', onClick: () => { props.panesVisibleChange(true, true) } },
-                    ]}
-                />
-            </Box>
+        <div style={{"width": "100%"}}>
+            <div>toolbar</div>
             <Editor
                 tinymceScriptSrc={"/assets/libs/tinymce/tinymce.min.js"}
                 onInit={(evt, editor) => editorRef.current = editor}
@@ -81,7 +60,7 @@ export const MainEditor = (props) => {
                     content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
                 }}
             />
-        </Box>
+        </div>
     )
 
 }

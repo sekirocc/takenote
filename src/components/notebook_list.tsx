@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 
 import { getNotebooksData } from '../lib/notes';
-import { Grommet, Header, Text, Box, Grid, Button, DataTable, List } from 'grommet';
+import { Grommet, Header, Text as div, Box, Grid, Button, DataTable, List } from 'grommet';
 import { Data } from "grommet/components/Data";
 
 export const NotebookList = (props) => {
@@ -14,19 +14,9 @@ export const NotebookList = (props) => {
     rowProps[props.current.name] = { background: "dark-5" };
 
     return (
-        <Box
-            // overflow="scroll"
-            gridArea="notebook_list"
-            background="white"
-            width="small"
-            animation={[
-                { type: 'fadeIn', duration: 300 },
-                // { type: 'slideRight', size: 'xlarge', duration: 150 },
-            ]} >
-                <Text textAlign="center" >notebooks</Text>
-            <Box
-                border={{side: "left"}}
-                overflow="scroll" >
+        <>
+            <div >notebooks</div>
+            <div style={{ "overflow": "scroll" }}>
                 <DataTable
                     className="notebooks_pane"
                     columns={columns}
@@ -35,8 +25,10 @@ export const NotebookList = (props) => {
                     data={props.notebooks}
                     onClickRow={({ datum, }) => props.selectNotebookHandler(datum.name)}
                 />
-            </Box>
-        </Box>
+            </div>
+
+        </>
+
         // <Box
         //     overflow="scroll"
         //     gridArea="notebook_list"
