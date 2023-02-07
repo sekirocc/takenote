@@ -1,54 +1,35 @@
 import { useRef, useState, useEffect } from "react";
 
-import { getNotebooksData } from '../lib/notes';
-import { Grommet, Header, Text as div, Box, Grid, Button, DataTable, List } from 'grommet';
-import { Data } from "grommet/components/Data";
+import { AnchorButton, Button, ButtonGroup, Classes, Icon, IconSize } from "@blueprintjs/core";
+import { Popover2 } from "@blueprintjs/popover2";
 
 export const NotebookList = (props) => {
     console.log("in NotebookList");
-
-    const columns = [
-        { property: "name", size: "50px", primary: true, }
-    ]
-    var rowProps = {};
-    rowProps[props.current.name] = { background: "dark-5" };
+    console.log(props);
 
     return (
         <>
-            <div >notebooks</div>
-            <div style={{ "overflow": "scroll" }}>
-                <DataTable
-                    className="notebooks_pane"
-                    columns={columns}
-                    primaryKey="name"
-                    rowProps={rowProps}
-                    data={props.notebooks}
-                    onClickRow={({ datum, }) => props.selectNotebookHandler(datum.name)}
-                />
+            <div className="notebooks_list pane-header">
+                <ButtonGroup>
+                    <Button text={"Notebooks"} />
+                    <Button text={"Tags"} />
+                </ButtonGroup>
             </div>
+            <div style={{ "overflow": "scroll" }}>
+                <div className="section-library"></div>
+                <div className="section-notebooks">
+                    <ul className={Classes.LIST_UNSTYLED + " " + Classes.LIST}
+                    >
 
+                        {props.notebooks.map((notebook) => {
+                            return <li key={notebook.name} onClick={() => { props.selectNotebookHandler(notebook.name); }}>{notebook.name}</li>
+                        })}
+
+                    </ul></div>
+            </div>
+            <div className="pane-footer">
+                <Button minimal={true} icon={<Icon size={IconSize.LARGE} icon={"plus"}></Icon>} />
+            </div>
         </>
-
-        // <Box
-        //     overflow="scroll"
-        //     gridArea="notebook_list"
-        //     background="dark-3"
-        //     width="small"
-        //     animation={[
-        //         { type: 'fadeIn', duration: 300 },
-        //         // { type: 'slideRight', size: 'xlarge', duration: 150 },
-        //     ]}
-        // >
-        //     {props.notebooks.map(({name,}) => (
-        //         <Button key={name} href="#" hoverIndicator onClick={() => props.selectNotebookHandler(name)}>
-        //             <Box
-        //                 pad={{ horizontal: 'medium', vertical: 'small' }}
-        //                 background={props.current.name == name ? "dark-4": "dark-3"}
-        //                 >
-        //                 <Text>{name}</Text>
-        //             </Box>
-        //         </Button>
-        //     ))}
-        // </Box>
     )
 }

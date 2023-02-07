@@ -1,63 +1,32 @@
 import { useRef, useState, useEffect } from "react";
 
-import { getNotebooksData } from '../lib/notes';
-import { Grommet, Header, Text, Box, Grid, Button, DataTable } from 'grommet';
+import { Button, ButtonGroup, Classes, Icon, IconSize, Text } from "@blueprintjs/core";
 
 export const NoteList = (props) => {
 
-    const columns = [
-        { property: "name", size: "50px", primary: true, }
-    ]
-    var rowProps = {};
-    rowProps[props.current.name] = { background: "dark-5" };
-
     return (
-        <Box
-            // overflow="scroll"
-            gridArea="note_list"
-            background="white"
-            width="small"
-            animation={[
-                { type: 'fadeIn', duration: 300 },
-                // { type: 'slideRight', size: 'xlarge', duration: 150 },
-            ]} >
+        <>
+            <div className="notes_list pane-header">
+                <ButtonGroup style={{ "display": "flex", "justifyContent": "center", "alignItems": "center" }}>
+                    <Text>{props.notebook.name}</Text>
+                    <Button minimal={true} icon={<Icon size={IconSize.LARGE} icon={"plus"}></Icon>} />
+                </ButtonGroup>
+            </div>
+            <ul className={Classes.LIST_UNSTYLED + " " + Classes.LIST}
+                style={{ "overflow": "scroll" }}>
+                {props.notes.map((note) => {
+                    return <li key={note.name} onClick={() => { props.selectNoteHandler(note.name); }}>{note.name}</li>
+                })}
 
-            <Text textAlign="center" >notes</Text>
-            <Box
-                border={{side: "left"}}
-                overflow="scroll" >
-                <DataTable
-                    className="notes_pane"
-                    columns={columns}
-                    primaryKey="name"
-                    // size="xlarge"
-                    rowProps={rowProps}
-                    data={props.notes}
-                    onClickRow={({ datum, }) => props.selectNoteHandler(datum.name)}
-                />
+            </ul>
 
-            </Box>
-        </Box>
+            <div className="pane-footer" >
+                    <div className="searcher bp4-input-group bp4-small" >
+                        <span className={"bp4-icon bp4-icon-search "}></span>
+                        <input className={"bp4-input "} type="search" placeholder="Filter by keyword" dir="auto" />
+                    </div>
+            </div>
+        </>
 
-        // <Box
-        //     overflow="scroll"
-        //     gridArea="note_list"
-        //     background="dark-4"
-        //     width="small"
-        //     animation={[
-        //         { type: 'fadeIn', duration: 300 },
-        //         { type: 'slideRight', size: 'xlarge', duration: 150 },
-        //     ]}
-        // >
-        //     {props.notes.map(({name,}) => (
-        //         <Button key={name} href="#" hoverIndicator onClick={() => props.selectNoteHandler(name)}>
-        //             <Box
-        //                 pad={{ horizontal: 'medium', vertical: 'small' }}
-        //                 background={props.current.name == name ? "dark-4": "dark-3"}>
-        //                 <Text>{name}</Text>
-        //             </Box>
-        //         </Button>
-        //     ))}
-        // </Box>
     )
 }

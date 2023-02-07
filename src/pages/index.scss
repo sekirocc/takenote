@@ -1,28 +1,98 @@
 @import "~@blueprintjs/icons/lib/scss/variables";
+@import "~@blueprintjs/core/lib/scss/variables";
 
 // using node-style package resolution in a CSS file:
 @import "~normalize.css";
 @import "~@blueprintjs/core/lib/css/blueprint.css";
 @import "~@blueprintjs/icons/lib/css/blueprint-icons.css";
 
+$pane-header-height: 50px;
+$pane-footer-height: 50px;
+
+$pane1-width: 200px;
+$pane2-width: 250px;
+
 .container {
+    background-color: white;
     display: flex;
     height: 100vh;
-    padding: 10px;
+
+    .pane {
+        border-right: 1px solid red;
+    }
+
+    .pane-header {
+        height: $pane-header-height;
+        min-height: $pane-header-height;
+        padding: 10px;
+        border-bottom: 1px solid red;
+        text-align: center;
+    }
+
+    .pane-footer {
+        height: $pane-footer-height;
+        min-height: $pane-footer-height;
+        margin-top: auto;
+        border-top: 1px solid red;
+        text-align: left;
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+    }
 
     .pane1 {
         display: auto;
-        overflow:auto;
-        width: 200px;
-    }
-    .pane2 {
-        display: auto;
-        overflow:auto;
-        width: 200px;
-    }
-    .pane3 {
+        width: $pane1-width;
+        min-width: $pane1-width;
+
+        overflow: auto;
         display: flex;
-        overflow:auto;
+        flex-direction: column;
+
+        ul {
+            li {
+                border-bottom: 1px solid green;
+                padding: 5px;
+
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+            }
+        }
+
+    }
+
+    .pane2 {
+        width: $pane2-width;
+        min-width: $pane2-width;
+
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+
+        ul {
+            li {
+                border-bottom: 1px solid green;
+                padding: 5px;
+
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+            }
+        }
+
+        .searcher {
+            flex-grow: 1;
+            margin: 0 10px;
+        }
+    }
+
+    .pane3 {
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+
         flex-grow: 1;
     }
+
 }

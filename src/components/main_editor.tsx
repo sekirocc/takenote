@@ -3,14 +3,9 @@ import { Editor } from "@tinymce/tinymce-react";
 
 import { getNoteDetail } from '../lib/notes';
 
-import { Close } from 'grommet-icons';
-
-import { Menu, Down } from 'grommet-icons';
-
-import { Box, Menu as GMenu, Button, DropButton, Grid, Heading, Text } from 'grommet';
-
 import { NoteDetail } from "../lib/type";
 import React from "react";
+import { Button, ButtonGroup, Icon, IconSize } from "@blueprintjs/core";
 
 export const MainEditor = (props) => {
     const editorRef = useRef(null);
@@ -37,8 +32,13 @@ export const MainEditor = (props) => {
     })
 
     return (
-        <div style={{"width": "100%"}}>
-            <div>toolbar</div>
+        <>
+            <div className="notes_list pane-header">
+                <ButtonGroup>
+                    <Button text={"Note"} />
+                    <Button text={"Tags"} />
+                </ButtonGroup>
+            </div>
             <Editor
                 tinymceScriptSrc={"/assets/libs/tinymce/tinymce.min.js"}
                 onInit={(evt, editor) => editorRef.current = editor}
@@ -60,7 +60,10 @@ export const MainEditor = (props) => {
                     content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
                 }}
             />
-        </div>
+            <div className="pane-footer">
+                <Button minimal={true} icon={<Icon size={IconSize.LARGE} icon={"plus"}></Icon>} />
+            </div>
+        </>
     )
 
 }

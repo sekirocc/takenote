@@ -88,7 +88,7 @@ function App() {
     return (
         <div className="container">
             {showNotebookList &&
-                <div className="pane1">
+                <div className="pane pane1">
                     <NotebookList
                         notebooks={notebookList}
                         current={currentNotebook}
@@ -98,16 +98,17 @@ function App() {
             }
 
             {showNoteList &&
-                <div className="pane2">
+                <div className="pane pane2">
                     <NoteList
                         notes={noteList}
+                        notebook={currentNotebook}
                         current={currentNote}
                         selectNoteHandler={selectNote}
                     />
                 </div>
             }
 
-            <div className="pane3">
+            <div className="pane pane3">
                 <MainEditor
                     current={currentNote}
                     panesVisibleChange={changePaneVisible}
