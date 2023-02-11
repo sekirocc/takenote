@@ -1,6 +1,6 @@
 import { readDir, BaseDirectory, readTextFile } from '@tauri-apps/api/fs';
 //import { join } from 'path';
-import { Note, Notebook, NoteDetail } from './type';
+import { Note, Notebook, NoteDetail } from './types';
 
 export const getNotebooksData = async (dirInDownload: string): Promise<Notebook[]> => {
     // notice: lazy import, b'c in nextjs server build-time context, there is no 'navigator' or 'window' at all.
@@ -19,23 +19,34 @@ export const getNotebooksData = async (dirInDownload: string): Promise<Notebook[
 
     // have to use Promise.all to complete all async action in map.
     const notebooks = await Promise.all(
-        dirs.map(async (notebookFileEntry, index) => {
-            const dirpath = await join(downloadDirPath, dirInDownload, notebookFileEntry.name);
-            const notebook = new Notebook(notebookFileEntry.name, dirpath);
+        dirs
+            // only care about dir
+            .filter((notebookFileEntry) => {
+                return notebookFileEntry.children && notebookFileEntry.children.length > 0
+            })
+            .map(async (notebookFileEntry, index) => {
+                const dirpath = await join(downloadDirPath, dirInDownload, notebookFileEntry.name);
 
-            var notes = [];
-            if (notebookFileEntry.children) {
-                notes = await Promise.all(
-                    notebookFileEntry.children.map(async (noteFileEntry, subIndex) => {
-                        const dirpath = await join(notebook.dirpath, noteFileEntry.name);
-                        return new Note(noteFileEntry.name, dirpath);
-                    })
+                const notes = await Promise.all(
+                    notebookFileEntry.children
+                        .filter((noteFileEntry) => {
+                            // only those dirs are what we want.
+                            return noteFileEntry.children && noteFileEntry.children.length > 0;
+                        })
+                        .map(async (noteFileEntry, subIndex) => {
+                            const noteDirpath = await join(dirpath, noteFileEntry.name);
+                            const note = new Note(noteFileEntry.name, noteDirpath);
+                            const noteDetail = await getNoteDetail(note.dirpath, note.page);
+
+                            note.noteDetail = noteDetail;
+                            note.loaded = true;
+                            return note;
+                        })
                 );
-            }
 
-            notebook.notes = notes;
-            return notebook;
-        })
+                const notebook = new Notebook(notebookFileEntry.name, dirpath, notes);
+                return notebook;
+            })
     );
 
     console.log("notebooks");
@@ -43,34 +54,17 @@ export const getNotebooksData = async (dirInDownload: string): Promise<Notebook[
     return notebooks;
 };
 
-var noteDetailCache = {};
-
-export const getNoteDetail = async (note: Note): Promise<NoteDetail> => {
-    if (noteDetailCache[note.name]) {
-        console.log("noteDetail cache hit");
-        const noteDetail = noteDetailCache[note.name];
-        return noteDetail;
-    }
-
+export const getNoteDetail = async (noteDir: string, notePage: string): Promise<NoteDetail> => {
     const { join } = await import('@tauri-apps/api/path');
 
-    if (!note.dirpath) {
-        return null;
-    }
+    var notePagePath = await join(noteDir, notePage);
+    // console.log("read notePagePath");
+    // console.log(notePagePath);
 
-    var index_page_path = await join(note.dirpath, note.page);
-    console.log("page_path");
-    console.log(index_page_path);
+    const content = await readTextFile(notePagePath);
+    const noteDetail = new NoteDetail(content);
+    noteDetail.parseFrontMatters();
 
-    // index_page_path = index_page_path.replace(/(\s)/g, '\\$1');
-    console.log("page_path escape");
-    console.log(index_page_path);
-
-    const content = await readTextFile(index_page_path);
-
-    const noteDetail = new NoteDetail(note, content);
-    console.log(noteDetail);
-
-    noteDetailCache[note.name] = noteDetail;
+    // console.log(noteDetail);
     return noteDetail;
 }

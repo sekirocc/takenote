@@ -6,7 +6,7 @@ import { getNotebooksData } from '../lib/notes';
 import { NotebookList } from '../components/notebook_list';
 import { NoteList } from '../components/note_list';
 import { MainEditor } from "../components/main_editor";
-import { Note, Notebook } from "../lib/type";
+import { Note, Notebook } from "../lib/types";
 
 function App() {
     const [greetMsg, setGreetMsg] = useState("");
@@ -73,7 +73,7 @@ function App() {
 
     function selectNote(name: string) {
         noteList.find((note, i) => {
-            if (note.name == name) {
+            if (note.title == name) {
                 setCurrentNote(note);
                 return true;
             }

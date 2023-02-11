@@ -3,9 +3,9 @@ import { Editor } from "@tinymce/tinymce-react";
 
 import { getNoteDetail } from '../lib/notes';
 
-import { NoteDetail } from "../lib/type";
+import { NoteDetail } from "../lib/types";
 import React from "react";
-import { Button, ButtonGroup, Icon, IconSize } from "@blueprintjs/core";
+import { Button, ButtonGroup, Icon, IconSize, Text } from "@blueprintjs/core";
 
 export const MainEditor = (props) => {
     const editorRef = useRef(null);
@@ -17,32 +17,19 @@ export const MainEditor = (props) => {
 
     const [open, setOpen] = useState(false);
 
-    const [noteDetail, setNoteDetail] = useState<NoteDetail>(null);
-
-    useEffect(() => {
-        const isClient = typeof window !== 'undefined';
-        if (!isClient) { return; }
-
-        const fetchData = async () => {
-            const noteDetail = await getNoteDetail(props.current);
-            setNoteDetail(noteDetail);
-        }
-
-        fetchData();
-    })
-
     return (
         <>
-            <div className="notes_list pane-header">
-                <ButtonGroup>
-                    <Button text={"Note"} />
-                    <Button text={"Tags"} />
+            <div className="editor pane-header">
+                <ButtonGroup style={{ "display": "flex", "justifyContent": "center", "alignItems": "center" }}>
+                    <Button icon={<Icon size={IconSize.LARGE} icon={"edit"}></Icon>} />
+                    <Button icon={<Icon size={IconSize.LARGE} icon={"eye-open"}></Icon>} />
+                    <Button icon={<Icon size={IconSize.LARGE} icon={"panel-stats"}></Icon>} />
                 </ButtonGroup>
             </div>
             <Editor
                 tinymceScriptSrc={"/assets/libs/tinymce/tinymce.min.js"}
                 onInit={(evt, editor) => editorRef.current = editor}
-                initialValue={noteDetail && noteDetail.content}
+                initialValue={props.current.noteDetail != null && props.current.noteDetail.content}
                 init={{
                     width: "100%",
                     height: "100%",
@@ -61,7 +48,15 @@ export const MainEditor = (props) => {
                 }}
             />
             <div className="pane-footer">
-                <Button minimal={true} icon={<Icon size={IconSize.LARGE} icon={"plus"}></Icon>} />
+                <ButtonGroup style={{ "display": "flex", "justifyContent": "center", "alignItems": "center" }}>
+                    <Button minimal={true} icon={<Icon size={IconSize.LARGE} icon={"chevron-left"}></Icon>} />
+                    <Button minimal={true} icon={<Icon size={IconSize.LARGE} icon={"chevron-right"}></Icon>} />
+                </ButtonGroup>
+                <ButtonGroup style={{ "display": "flex", "justifyContent": "center", "alignItems": "center" }}>
+                    <Button minimal={true} icon={<Icon size={IconSize.LARGE} icon={"star-empty"}></Icon>} />
+                    <Button minimal={true} icon={<Icon size={IconSize.LARGE} icon={"presentation"}></Icon>} />
+                    <Button minimal={true} icon={<Icon size={IconSize.LARGE} icon={"more"}></Icon>} />
+                </ButtonGroup>
             </div>
         </>
     )
